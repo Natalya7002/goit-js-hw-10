@@ -29,11 +29,13 @@
 .value,
 .label {
   display: block;
+
   gap: 8px;
   padding-top: 4px;
 }
 
 .value {
+  font-family: 'Helvetica';
   font-size: 24px;
   font-weight: 600;
   padding-right: 22px;
@@ -42,4 +44,5 @@
 .label {
   font-size: 12px;
   font-weight: 200;
+  text-transform: uppercase;
 }
