@@ -25,12 +25,19 @@
 }
 .timer {
   display: flex;
-  font-size: 20px;
-  font-weight: 400;
 }
 .value,
 .label {
   display: block;
+  gap: 8px;
+}
+
+.value {
   font-size: 20px;
   font-weight: 600;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 100;
 }
