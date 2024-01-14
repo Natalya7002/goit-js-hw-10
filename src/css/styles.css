@@ -30,15 +30,16 @@
 .label {
   display: block;
   gap: 8px;
+  padding-top: 10px;
 }
 
 .value {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
-  padding-right: 14px;
+  padding-right: 18px;
 }
 
 .label {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 200;
 }
