@@ -1,18 +1,6 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-function fulfilled(delay) {
-  iziToast.success({
-    message: `Fulfilled promise in ${delay}ms`,
-  });
-}
-
-function rejected(delay) {
-  iziToast.error({
-    message: `Rejected promise in ${delay}ms`,
-  });
-}
-
 const refs = {
   form: document.querySelector('.form'),
   delay: document.querySelector('input[name="delay"]'),
@@ -25,11 +13,25 @@ refs.form.addEventListener('submit', event => {
   const delay = refs.delay.value;
   const state = [...refs.state].find(el => el.checked).value;
 
-  if (state === 'fulfilled') {
-    setTimeout(() => fulfilled(delay), delay);
-  }
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (state === 'fulfilled') {
+        resolve(delay);
+      } else {
+        reject(delay);
+      }
+    }, delay);
+  });
 
-  if (state === 'rejected') {
-    setTimeout(() => rejected(delay), delay);
-  }
+  promise
+    .then(() => {
+      iziToast.success({
+        message: `Fulfilled promise in ${delay}ms`,
+      });
+    })
+    .catch(() => {
+      iziToast.error({
+        message: `Rejected promise in ${delay}ms`,
+      });
+    });
 });

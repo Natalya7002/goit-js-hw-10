@@ -4,7 +4,8 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
 let userSelectedDate = null;
-let startButton = document.getElementById('start-timer');
+
+const startButton = document.querySelector('button[data-start]');
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -15,11 +16,12 @@ const options = {
       userSelectedDate = selectedDates[0];
       startButton.disabled = false;
     } else {
-      iziToast.warning({
+      iziToast.error({
         title: 'Error',
         message: 'Please choose a date in the future',
       });
       startButton.disabled = true;
+      stopTimer();
     }
   },
 };
@@ -47,28 +49,46 @@ function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 }
 
-startButton.addEventListener('click', () => {
-  startButton.disabled = true;
-  const timer = setInterval(() => {
+const timer = {
+  days: document.querySelector('span[data-days]'),
+  hours: document.querySelector('span[data-hours]'),
+  minutes: document.querySelector('span[data-minutes]'),
+  seconds: document.querySelector('span[data-seconds]'),
+};
+
+let timerInterval;
+
+function startTimer() {
+  timerInterval = setInterval(() => {
     const currentTime = Date.now();
     const deltaTime = userSelectedDate - currentTime;
     const { days, hours, minutes, seconds } = convertMs(deltaTime);
 
-    document.querySelector('span[data-days]').textContent =
-      addLeadingZero(days);
-    document.querySelector('span[data-hours]').textContent =
-      addLeadingZero(hours);
-    document.querySelector('span[data-minutes]').textContent =
-      addLeadingZero(minutes);
-    document.querySelector('span[data-seconds]').textContent =
-      addLeadingZero(seconds);
+    timer.days.textContent = addLeadingZero(days);
+    timer.hours.textContent = addLeadingZero(hours);
+    timer.minutes.textContent = addLeadingZero(minutes);
+    timer.seconds.textContent = addLeadingZero(seconds);
 
     if (deltaTime < 1000) {
-      clearInterval(timer);
-      document.querySelector('span[data-days]').textContent = '00';
-      document.querySelector('span[data-hours]').textContent = '00';
-      document.querySelector('span[data-minutes]').textContent = '00';
-      document.querySelector('span[data-seconds]').textContent = '00';
+      stopTimer();
     }
   }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timer.days.textContent = '00';
+  timer.hours.textContent = '00';
+  timer.minutes.textContent = '00';
+  timer.seconds.textContent = '00';
+}
+
+startButton.addEventListener('click', () => {
+  startButton.disabled = true;
+
+  if (userSelectedDate === null) {
+    return;
+  }
+
+  startTimer();
 });
